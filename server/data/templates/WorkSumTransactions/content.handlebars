@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>NorthWind Dashboard</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+  
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+
+</head>
+<body>
+
+<table id="example" class="display" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th>Part</th>
+        <th>Description</th>
+        <th>Plant</th>
+        <th>Date</th>
+        <th>Test</th>
+    </tr>
+    </thead>
+<tbody>
+{{#each transaction}}
+    <tr>
+        <td>{{partNumber}}</td>
+        <td>{{description}}</td>
+        <td>{{Plant}}</td>
+        <td>{{date transTime "lll"}}</td>
+        <!--  https://momentjs.com/ -->
+    </tr>
+{{/each}}
+
+</tbody>
+</table>
+
+
+  <script>
+    /*
+    html-with-browser-client recipe automatically adds global jsreport object
+    which includes the rendering inputs - jsreport.template, jsreport.data
+    and also function render and download to dynamically render reports from the browser
+    */
+    $(document).ready(function() {
+        alert('partNumber=> ' + jsreport.data.partNumber)
+        var table = $('table.display').DataTable();
+        $('#example tbody').on('click', 'tr', function () {
+            var data = table.row( this ).data();
+            alert( 'You clicked on '+data[0]+'\'s row' );
+        } );
+    } );    
+  </script>
+</body>
+</html>

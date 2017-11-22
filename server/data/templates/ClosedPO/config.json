@@ -1,0 +1,24 @@
+{
+    "shortid": "S19v0kQgz",
+    "recipe": "phantom-pdf",
+    "engine": "handlebars",
+    "modificationDate": {
+        "$$date": 1511378665498
+    },
+    "_id": "TGy4XiWX3NtLq3vW",
+    "data": {
+        "shortid": "Hyy9RJ7gG"
+    },
+    "scripts": [
+        {
+            "shortid": "rJJJ1l7eG"
+        },
+        {
+            "shortid": "Sy-sMa9Ee"
+        }
+    ],
+    "resources": {
+        "items": []
+    },
+    "phantom": {}
+}

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>NorthWind Dashboard</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/rg-1.0.2/datatables.min.css"/>
+ 
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/rg-1.0.2/datatables.min.js"></script>
+
+</head>
+<body>
+<table id="example" class="display" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+{{moment }}
+<!--    //       var dtStart =Moment(new Date()).format("MM-DD-YYYY hh:mm:ss"); -->
+
+        {{#ifCond2 "1" "1"}}
+        "block"
+        {{else}}
+        "block2"
+        {{/ifCond2}}
+        {{ifCond2 "not block"}}
+
+        {{#ifCond3 "1" "1"}}
+        "block for ifCond3"
+        {{else}}
+        "block3"
+        {{/ifCond3}}
+        {{ifCond3 "not block for ifCond3"}}
+
+
+        </tr>
+    <tr>
+        <th>Plant</th>
+        <th>Part</th>
+        <th>Description</th>
+        <th>Pieces Produced</th>
+        <th>Per Part Value Add</th>
+        <th>Total Value Add Sales</th>
+        <th>Consumable Tool Cost</th>
+        <th>Total Tool Cost</th>
+        <th>Consumable Vrs Actual</th>
+        <th>Consumable Vrs Estimate</th>
+        <th>Tool Cost Vrs VA Sales</th>
+    </tr>
+    </thead>
+<tbody>
+{{#each summary}}
+    <tr>
+        <td>{{plant}}</td>
+        <td>{{partNumber}}</td>
+        <td>{{descript}}</td>
+        <td>{{addCommas pcsProduced}}</td>
+        <td>{{valueAddedSales}}</td>
+        <td>{{totalValueAdd}}</td>
+        <td>{{ConsToolCost}}</td>
+        <td>{{actualToolCost}}</td>
+        <td>{{consumableVrsActualPct}}</td>
+        <td>{{actualVrsBudgetedPct}}</td>
+        <td>{{actualVrsVaSalesPct}}</td>
+    </tr>
+{{/each}}
+
+</tbody>
+</table>
+
+<div id='detail'></div>
+<table id="ex1" class="display" width="100%"></table>
+
+  <script>
+    /*
+    html-with-browser-client recipe automatically adds global jsreport object
+    which includes the rendering inputs - jsreport.template, jsreport.data
+    and also function render and download to dynamically render reports from the browser
+    */
+
+    function runWorkSumTransactions(partNumber) {
+alert('partNumber=>'+partNumber);
+//display report in the new tab
+jsreport.render('_blank', { 
+            template: { 
+                name: 'WorkSumTransactions',
+            },
+            data:{
+              "dtStart": jsreport.data.dtStart,
+              "dtEnd": jsreport.data.dtEnd,
+              "partNumber":partNumber
+            }
+        });
+        
+        // render "country detail" template into detail div
+        // this creates iframe inside the div with the html content, which avoids scripts and styles collision
+/*
+        jsreport.render("detail", { 
+            template: { 
+                name: 'WorkSumTransactions',
+            },
+            data:{
+              "dtStart": "01-1-2017 00:00:00",
+              "dtEnd": "01-12-2017 23:15:10",
+              "partNumber":"000 560 175 006"
+            }
+        })
+        $('iframe')[0].onload =function () {
+            this.style.height = this.contentWindow.document.body.scrollHeight + 'px';
+        }
+  */      
+        
+    }
+
+
+    $(document).ready(function() {
+        // var table = $('table.display').DataTable();
+        var table = $('#example').DataTable( {
+            order: [[0, 'asc']],
+            rowGroup: {
+                startRender: null,
+                endRender: function ( rows, group ) {
+                    var pcsProducedSum = rows
+                        .data()
+                        .pluck(3)
+                        .reduce( function (a, b) {
+                            return a + b*1;
+                        }, 0);
+                    var actualToolCostSum = rows
+                        .data()
+                        .pluck(7)
+                        .reduce( function (a, b) {
+                            return a + b*1;
+                        }, 0);
+     
+                    return $('<tr/>')
+                        .append( '<td colspan="3">Totals for plant '+group+'</td>' )
+                        .append( '<td>'+pcsProducedSum.toFixed(0)+'</td>' )
+                        .append(',<td colspan="3">&nbsp</td>')
+                        .append( '<td>'+actualToolCostSum.toFixed(2)+'</td>' );
+
+
+                },
+                dataSrc: 0
+            }
+
+
+        } );
+        $('#example tbody').on('click', 'tr', function () {
+            var data = table.row( this ).data();
+            alert( 'You clicked on '+data[1]+'\'s row' );
+            runWorkSumTransactions(data[1]);
+        } );
+    } );    
+
+
+  </script>
+</body>
+</html>

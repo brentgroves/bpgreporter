@@ -1,0 +1,23 @@
+{
+  "name": "jsreport-server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "jsreport": "jsreport"
+  },
+  "jsreport": {
+    "entryPoint": "server.js"
+  },
+  "dependencies": {
+    "dateformat": "^3.0.2",
+    "handlebars-helpers": "^0.10.0",
+    "jsreport": "1.9.2",
+    "moment": "^2.19.2",
+    "mssql": "^4.1.0",
+    "nodemailer": "^4.4.0",
+    "nodemailer-smtp-transport": "^2.7.4",
+    "numeral": "^2.0.6",
+    "sendgrid": "^5.2.3",
+    "string-format": "^0.5.0"
+  }
+}

@@ -1,0 +1,20 @@
+{
+    "shortid": "rk6HHixeG",
+    "recipe": "html-with-browser-client",
+    "engine": "handlebars",
+    "modificationDate": {
+        "$$date": 1511377688490
+    },
+    "_id": "taw49vbJbVzK7McK",
+    "scripts": [
+        {
+            "shortid": "SkwdMngxf"
+        },
+        {
+            "shortid": "Sy-sMa9Ee"
+        }
+    ],
+    "data": {
+        "shortid": "ByRpb3egf"
+    }
+}
