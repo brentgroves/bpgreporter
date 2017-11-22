@@ -11,6 +11,7 @@
   "dependencies": {
     "dateformat": "^3.0.2",
     "handlebars-helpers": "^0.10.0",
+    "handlebars-utils": "^1.0.6",
     "jsreport": "1.9.2",
     "moment": "^2.19.2",
     "mssql": "^4.1.0",

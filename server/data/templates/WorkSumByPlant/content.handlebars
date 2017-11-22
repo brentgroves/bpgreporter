@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>NorthWind Dashboard</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/rg-1.0.2/datatables.min.css"/>
  
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/rg-1.0.2/datatables.min.js"></script>
@@ -53,12 +53,12 @@
         <td>{{plant}}</td>
         <td>{{partNumber}}</td>
         <td>{{descript}}</td>
-        <td>{{addCommas pcsProduced}}</td>
+        <td style="text-align:right;">{{addCommas pcsProduced}}</td>
         <td>{{valueAddedSales}}</td>
         <td>{{totalValueAdd}}</td>
         <td>{{ConsToolCost}}</td>
-        <td>{{actualToolCost}}</td>
-        <td>{{consumableVrsActualPct}}</td>
+        <td>${{actualToolCost}}</td>
+        <td>{{toFixed consumableVrsActualPct 2}}</td>
         <td>{{actualVrsBudgetedPct}}</td>
         <td>{{actualVrsVaSalesPct}}</td>
     </tr>
@@ -110,8 +110,20 @@ jsreport.render('_blank', {
   */      
         
     }
-
-
+// http://numeraljs.com/#format
+    Number.prototype.formatMoney = function(places, symbol, thousand, decimal) {
+    	places = !isNaN(places = Math.abs(places)) ? places : 2;
+    	symbol = symbol !== undefined ? symbol : "$";
+    	thousand = thousand || ",";
+    	decimal = decimal || ".";
+    	var number = this, 
+    	    negative = number < 0 ? "-" : "",
+    	    i = parseInt(number = Math.abs(+number || 0).toFixed(places), 10) + "",
+    	    j = (j = i.length) > 3 ? j % 3 : 0;
+    	return symbol + negative + (j ? i.substr(0, j) + thousand : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousand) + (places ? decimal + Math.abs(number - i).toFixed(places).slice(2) : "");
+    };
+// Remove non-numeric chars (except decimal point/minus sign):
+//priceVal = parseFloat(price.replace(/[^0-9-.]/g, '')); // 12345.99
     $(document).ready(function() {
         // var table = $('table.display').DataTable();
         var table = $('#example').DataTable( {
@@ -119,25 +131,29 @@ jsreport.render('_blank', {
             rowGroup: {
                 startRender: null,
                 endRender: function ( rows, group ) {
+                    var myNumeral = numeral(1000);
                     var pcsProducedSum = rows
                         .data()
                         .pluck(3)
                         .reduce( function (a, b) {
-                            return a + b*1;
+                            var nca = numeral(a).value();
+                            var ncb = numeral(b).value();
+                            return nca + ncb*1;
                         }, 0);
                     var actualToolCostSum = rows
                         .data()
                         .pluck(7)
                         .reduce( function (a, b) {
-                            return a + b*1;
+                            var nca = numeral(a).value();
+                            var ncb = numeral(b).value();
+                            return nca + ncb*1;
                         }, 0);
      
                     return $('<tr/>')
                         .append( '<td colspan="3">Totals for plant '+group+'</td>' )
-                        .append( '<td>'+pcsProducedSum.toFixed(0)+'</td>' )
+                        .append( '<td style="text-align:right;">'+numeral(pcsProducedSum).format('(0,0.00)')+'</td>' )
                         .append(',<td colspan="3">&nbsp</td>')
-                        .append( '<td>'+actualToolCostSum.toFixed(2)+'</td>' );
-
+                        .append( '<td>'+numeral(actualToolCostSum).format('($0,0.00)')+'</td>' );
 
                 },
                 dataSrc: 0
