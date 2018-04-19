@@ -2,37 +2,53 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>NorthWind Dashboard</title>
+  <title>Tool Transactions</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
-  
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
 
 </head>
 <body>
 
-<table id="example" class="display" cellspacing="0" width="100%">
-    <thead>
-    <tr>
-        <th>Part</th>
-        <th>Description</th>
-        <th>Plant</th>
-        <th>Date</th>
-    </tr>
-    </thead>
-<tbody>
-{{#each transaction}}
-    <tr>
-        <td>{{partNumber}}</td>
-        <td>{{description}}</td>
-        <td>{{Plant}}</td>
-        <td>{{date transTime "lll"}}</td>
-        <!--  https://momentjs.com/ -->
-    </tr>
-{{/each}}
+<div class="row">
+    <div class="col-md-1">
+        <table id="example" class="display" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>Part</th>
+                <th>Item</th>
+                <th>Description</th>
+                <th>Plant</th>
+                <th>Name</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+                {{#each transactions}}
+                    <tr>
+                        <td>{{partNumber}}</td>
+                        <td>{{itemNumber}}</td>
+                        <td>{{description}}</td>
+                        <td>{{Plant}}</td>
+                        <td>{{userName}}</td>
+                        <td>{{date transTime "lll"}}</td>
+                        <!--  https://momentjs.com/ -->
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+</br>
+<div class="row">
+  <div class="col-xs-1 col-xs-offset-8">
+        <!-- Standard button -->
+        <button type="button" onclick="downloadExcel()" class="btn btn-default">Excel</button>
+  </div>
+</div>
 
-</tbody>
-</table>
 
 
   <script>
@@ -49,6 +65,20 @@
             alert( 'You clicked on '+data[0]+'\'s row' );
         } );
     } );    
+
+    function downloadExcel() {
+        jsreport.download(jsreport.data.partNumber + '.xlsx', {
+            template: { 
+                name: 'WorkSumTransXls'
+            },
+            data: {
+                dtStart: jsreport.data.dtStart,
+                dtEnd: jsreport.data.dtEnd,    
+                partNumber:jsreport.data.partNumber
+            }
+        })
+    }
+
   </script>
 </body>
 </html>
