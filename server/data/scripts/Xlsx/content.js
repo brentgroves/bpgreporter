@@ -11,6 +11,8 @@ var config = {
     database: 'M2MDATA01',
     //  database: 'm2mdata02',
     port: 1433,
+    connectionTimeout:25000,
+    requestTimeout:30000,
     //    debug: true,
     options: {
         encrypt: false // Use this if you're on Windows Azure
@@ -27,9 +29,23 @@ var cribDefTO = {
     }
 }
 
+
 function beforeRender(done) {
-    //       var dtStart =Moment(new Date()).format("MM-DD-YYYY hh:mm:ss");
-    //       var dtEnd =Moment(new Date()).format("MM-DD-YYYY hh:mm:ss");
+    //Object.assign(request.data, { transactions: recordset }) !!!excel
+    switch(request.data.rptName){
+        case "WorkSumByPlant":
+            WorkSumTrans();
+            break;
+        case "WorkSumTrans":
+            WorkSumTrans();
+            break;
+        default:
+            break;
+
+    }
+}
+
+function WorkSumTrans(){
     console.log('hello2');
     console.log(request.data.dtStart);
     console.log(request.data.dtEnd);
@@ -41,6 +57,7 @@ function beforeRender(done) {
         var dtStart = request.data.dtStart;
         var dtEnd = request.data.dtEnd;
         var partNumber = request.data.partNumber;
+        var rptName = request.data.rptName;
         var reqSql = new sql.Request();
         reqSql.input('dtStart', sql.VarChar(20), dtStart);
         reqSql.input('dtEnd', sql.VarChar(20), dtEnd);
@@ -58,25 +75,25 @@ function beforeRender(done) {
             console.log(result.returnValue) // procedure return value
             console.log(result.output) // key/value collection of output values
             console.log(result.rowsAffected) // array of numbers, each number represents the number of rows affected by executed statemens
-            request.data = {
+            Object.assign(request.data, {
                 transactions: result.recordset,
                 generatedOn: generatedOn,
                 dtStart: dtStart,
                 dtEnd: dtEnd,
-                partNumber:partNumber
-            };
-        
+                partNumber:partNumber,
+                rptName:rptName
+            });
             done();
         });
-    }).catch(done);
-
+        }).catch(done);
+    
 }
-
+/*
 function afterRender(req, res, done) {
     //filter out script execution for phantom header
     if (req.options.isChildRequest) {
         return done();
     }
     return done();
-
 }
+*/

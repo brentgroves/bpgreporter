@@ -1,0 +1,25 @@
+{
+  "dtStart": "12-1-2017 00:00:00",
+  "dtEnd": "12-6-2017 23:15:10",
+  "partNumber":"2004981",
+  "plantList":",2,3,5,6,",
+  "summary": [
+
+    {"plant": "2", "partNumber": "M0009326", "descript": "bmw","pcsProduced":1000,
+     "valueAddedSales":123.23,"totalValueAdd":12345.22,"ConsToolCost": 12345.22,
+     "actualToolCost":12345.22,"consumableVrsActualPct":22,
+     "actualVrsBudgetedPct": 125.12,"actualVrsVaSalesPct": 89.33
+    },
+    {"plant": "2", "partNumber": "M0009326", "descript": "bmw","pcsProduced":1000,
+     "valueAddedSales":123.23,"totalValueAdd":12345.22,"ConsToolCost": 12345.22,
+     "actualToolCost":12345.22,"consumableVrsActualPct":22,
+     "actualVrsBudgetedPct": 125.12,"actualVrsVaSalesPct": 89.33
+    },
+    {"plant": "2", "partNumber": "M0009326", "descript": "bmw","pcsProduced":1000,
+     "valueAddedSales":123.23,"totalValueAdd":12345.22,"ConsToolCost": 12345.22,
+     "actualToolCost":12345.22,"consumableVrsActualPct":22,
+     "actualVrsBudgetedPct": 125.12,"actualVrsVaSalesPct": 89.33
+    }    
+    ],
+  "rptName":"WorkSumByPlant"
+}

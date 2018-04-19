@@ -11,6 +11,23 @@ function ifCond2(v1, v2, options) {
 }
 
 
+function parceUTC(utcDate, options) {
+    //01-1-2015 00:00:00
+    var dateFormat = require('dateformat');
+    var format = require('string-format');
+    var dtStr =format('{0} {1}', utcDate.substring(0,10), utcDate.substring(11,19));
+    var dt = new Date(dtStr);
+//    dt.setHours(dt.getHours()+5); did not work
+    var adjDate=dateFormat(dt, "m/dd/yy h:MM:ss TT");
+
+    if (utils.isBlock(options)){
+        return options.fn(this);
+    }else{
+        return adjDate.toString();
+    }
+
+}
+
 function deptToPlant(dept) {
     var plant='3';
     switch(dept) {
@@ -117,6 +134,6 @@ function beforeRender(done) {
 
     */
 //    request.template.helpers +='\n' + deptToPlant + '\n' + fmtDate + '\n' + fmtDesc + '\n' + formatPhone + '\n' + formatDate + '\n' + trim +'\n' + toFixed + '\n' + toJSON;
-    request.template.helpers +='\n' + ifCond2 + '\n' + deptToPlant + '\n' + fmtDesc + '\n' + formatPhone + '\n' + trim +'\n' + toJSON;
+    request.template.helpers +='\n' + parceUTC + '\n' + ifCond2 + '\n' + deptToPlant + '\n' + fmtDesc + '\n' + formatPhone + '\n' + trim +'\n' + toJSON;
     done();
 }

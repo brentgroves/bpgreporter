@@ -1,0 +1,43 @@
+{{#each transactions}}
+    {{#xlsxAdd "xl/worksheets/sheet2.xml" "worksheet.sheetData[0].row"}}
+        <row r="{{sum @index 3}}">
+            <c r="A{{#sum @index 3}}{{/sum}}" t="inlineStr"><is><t>{{partNumber}}</t></is></c>
+            <c r="B{{#sum @index 3}}{{/sum}}" t="inlineStr"><is><t>{{itemNumber}}</t></is></c>
+            <c r="C{{#sum @index 3}}{{/sum}}" t="inlineStr"><is><t>{{description}}</t></is></c>
+            <c r="D{{#sum @index 3}}{{/sum}}" s="12" t="inlineStr"><is><t>{{Plant}}</t></is></c>
+            <c r="E{{#sum @index 3}}{{/sum}}" t="inlineStr"><is><t>{{userName}}</t></is></c>
+            <c r="F{{#sum @index 3}}{{/sum}}" t="inlineStr"><is><t>{{parceUTC transTime}}</t></is></c>
+            <c r="G{{#sum @index 3}}{{/sum}}" t="n"><v>{{addCommas qty}}</v></c>
+            <c  r="H{{#sum @index 3}}{{/sum}}" s="1"  t="n"><v>{{unitCost}}</v></c>
+            <c  r="I{{#sum @index 3}}{{/sum}}" s="1"  t="n">
+                <v>
+                  {{#if consumable}}
+                    {{totCost}}
+                  {{else}}
+                    0
+                  {{/if}}
+                </v>
+            </c>
+            <c  r="J{{#sum @index 3}}{{/sum}}" s="1"  t="n"><v>{{totCost}}</v></c>
+        </row>
+
+    {{/xlsxAdd}}
+
+{{/each}}
+
+{{#xlsxAdd "xl/worksheets/sheet2.xml" "worksheet.sheetData[0].row"}}
+    <row r="{{sum 3 transactions.length}}">
+        <c r="H{{sum 3 transactions.length}}" s="11" t="inlineStr"><is><t>{{append "Total Cost Summary" ":" }}</t></is></c>
+        <c r="I{{sum 3 transactions.length}}" s="16"  t="n"><f>SUM(I3:I{{#sum transactions.length 2}}{{/sum}})</f></c>
+        <c r="J{{sum 3 transactions.length}}" s="16"  t="n"><f>SUM(J3:J{{#sum transactions.length 2}}{{/sum}})</f></c>
+    </row>
+
+{{/xlsxAdd}}
+
+{{#xlsxMerge "xl/workbook.xml" "workbook.sheets[0].sheet[1]"}}
+   <sheet name="WorkSumTrans"/>
+{{/xlsxMerge}}
+
+
+{{{xlsxPrint}}}
+
